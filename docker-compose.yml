@@ -5,7 +5,7 @@ services:
     image: postgres:15-alpine
     volumes:
       - ./pg_dump.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
     restart: unless-stopped
@@ -14,9 +14,11 @@ services:
     image: redis:7.2-alpine
     restart: unless-stopped
     command: ["redis-server", "/usr/local/etc/redis/redis.conf","--daemonize","no"]
+    ports:
+      - 6379:6379
     volumes:
       - ./redis.conf.example:/usr/local/etc/redis/redis.conf
-      - redis_data:/data
+      - ./redis_data:/data
 
   harukamaaleoexplorer:
     image: harukamaaleoexplorer
@@ -30,17 +32,17 @@ services:
       - DB_PASS=postgres
       - DB_DATABASE=postgres
       - DB_SCHEMA=explorer
-      - REDIS_HOST=redis
+      - REDIS_HOST=172.17.0.1
       - REDIS_PORT=6379
       - REDIS_DB=0
       - HOST=0.0.0.0
       - PORT=8800
       - API_PORT=8801
       - API_HOST=0.0.0.0
-      - P2P_NODE_HOST=host.docker.internal
-      - P2P_NODE_PORT=4133
+      - P2P_NODE_HOST=172.17.0.1
+      - P2P_NODE_PORT=4134
       - P2P_BLOCK_BATCH_SIZE=1
-      - RPC_URL_ROOT=http://host.docker.internal:3033
+      - RPC_URL_ROOT=http://172.17.0.1:3033
       - DEBUG=1
       - DEV_MODE=1
       - TURNSTILE_SITE_KEY=0x0

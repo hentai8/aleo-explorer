@@ -148,8 +148,8 @@ class Node:
                 genesis = Testnet3.dev_genesis_block.header.transactions_root
             else:
                 genesis = Testnet3.genesis_block.header.transactions_root
-            if msg.genesis_header.transactions_root != genesis:
-                raise ValueError("peer has wrong genesis block")
+            # if msg.genesis_header.transactions_root != genesis:
+            #     raise ValueError("peer has wrong genesis block")
             self.handshake_state = 2
 
         elif isinstance(frame.message, Ping):
